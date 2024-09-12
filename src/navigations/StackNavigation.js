@@ -10,7 +10,7 @@ const StackNavigation = () => {
     // render
     return (
         <>
-            <Stack.Navigator initialRouteName='Login'>
+            <Stack.Navigator initialRouteName='Home'>
                 <Stack.Screen name="Home" component={HomeScreen} />
                 <Stack.Screen name="Profile" component={ProfileScreen} />
                 <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
