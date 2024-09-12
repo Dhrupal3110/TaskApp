@@ -11,29 +11,20 @@ const HomeScreen = ({ navigation }) => {
     try {
       const response = await petApi.findPetsByStatus(['available', 'pending', 'sold']);
       console.log(response.data[0], "response.data")
-      setPets(response.data.splice(0, 1));
+      setPets(response.data.splice(0, 100));
     } catch (error) {
       console.warn(error)
       Alert.alert('An error occurred');
     }
   };
 
-  const getThePet = async (id) => {
-    try {
-      const fetchedPet = await petApi.getPetById(id);
-      setPet(fetchedPet.data);
-    } catch (error) {
-      console.warn(error)
-      Alert.alert('An error occurred');
-    }
-  };
+
   useEffect(() => {
     getPet();
   }, []);
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Button title="Get First Pet" onPress={() => getThePet(1)} />
         {
           pets && pets.length > 0 && pets.map((pet) => <PetCard key={pet.id} pet={pet} />)
         }
