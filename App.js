@@ -13,12 +13,6 @@ import { PersistGate } from 'redux-persist/integration/react';
 export default function App() {
   // Load fonts
   const [fontsLoaded] = useFonts({
-    MontserratBold: require('./assets/fonts/Montserrat-Bold.ttf'),
-    MontserratRegular: require('./assets/fonts/Montserrat-Regular.ttf'),
-    MontserratBlack: require('./assets/fonts/Montserrat-Black.ttf'),
-    Monospace: require('./assets/fonts/Monospace.ttf'),
-    MonospaceBold: require('./assets/fonts/MonospaceBold.ttf'),
-    MonospaceOblique: require('./assets/fonts/MonospaceOblique.ttf'),
     QuicksandBold: require('./assets/fonts/Quicksand-Bold.ttf'),
     QuicksandLight: require('./assets/fonts/Quicksand-Light.ttf'),
     QuicksandMedium: require('./assets/fonts/Quicksand-Medium.ttf'),
