@@ -1,26 +1,32 @@
 import React from 'react';
 import { Card, Title, Paragraph, Chip } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 // Card component to display pet details using React Native Paper
 const PetCard = ({ pet }) => {
-    console.log(pet)
-  return (
-    <Card style={styles.card}>
-        {/* Display pet name */}
-        <Title style={styles.title}>{pet.name}</Title>
-        
-        {/* Display pet status */}
-        <Paragraph>Status: {pet.status}</Paragraph>
 
-        {/* Display pet category */}
+  // Function to generate random color for the chips
+  const getRandomColor = () => {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
+  const navigation = useNavigation();
+
+  
+  return (
+    <Card style={styles.card} onPress={() => navigation.navigate('PetDetail', { id: pet.id })}>
+        <Title variant="titleLarge">name: {pet.name}</Title>
+        <Paragraph>Status: {pet.status}</Paragraph>
         <Paragraph>Category: {pet.category?.name}</Paragraph>
-        
-        {/* Display pet tags */}
         {pet.tags && pet.tags.length > 0 && (
           <View style={styles.tagsContainer}>
             {pet.tags.map((tag) => (
-              <Chip key={tag.id} style={styles.tagChip}>
+              <Chip key={tag.id} style={[styles.tagChip,{backgroundColor: tag.color||getRandomColor()}]}>
                 {tag.name}
               </Chip>
             ))}
@@ -35,13 +41,12 @@ const styles = StyleSheet.create({
   card: {
     margin: 10,
     borderRadius: 10,
+    backgroundColor: '#fff',
+    padding: 10,
   },
   cover: {
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-  },
-  title: {
-    marginTop: 10,
   },
   tagsContainer: {
     flexDirection: 'row',
@@ -51,6 +56,7 @@ const styles = StyleSheet.create({
   tagChip: {
     marginRight: 5,
     marginBottom: 5,
+    backgroundColor: '#f0f0f0',
   },
 });
 
