@@ -1,0 +1,41 @@
+{
+  "build": {
+    "development-simulator": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      }
+    },
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "simulator": false
+      },
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "internal": {
+      "distribution": "internal",
+      "ios": {
+        "simulator": false
+      },
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "releaseChannel": "production",
+      "distribution": "store",
+      "android": {
+        "buildType": "app-bundle",
+        "releaseChannel": "production"
+      },
+      "ios": {
+        "releaseChannel": "production"
+      }
+    }
+  }
+}
