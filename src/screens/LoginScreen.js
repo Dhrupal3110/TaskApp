@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { validationMessages } from '../constants/ValidationMessages';
 import { loginUser } from '../redux/reducer/authSlice';
 import theme from '../../theme/ThemeConfig';
+import Toast from 'react-native-root-toast';
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -19,7 +20,15 @@ const LoginScreen = ({ navigation }) => {
     dispatch(loginUser(values))
       .unwrap()
       .then(() => {
-        // navigation.navigate('Home');
+        Toast.show('Login successful', {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 300,
+          opacity: 0.9,
+        })
       })
       .catch((error) => {
         console.error(error);
