@@ -1,7 +1,5 @@
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import StackNavigation from './src/navigations/StackNavigation';
 import { useFonts } from 'expo-font';
 import { ImageBackground, View, ActivityIndicator, StyleSheet } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
@@ -9,6 +7,9 @@ import theme from './theme/ThemeConfig';
 import { persistor, store } from './src/redux';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import * as Network from 'expo-network';
+import Toast from 'react-native-root-toast';
+import MainNavigator from './src/navigations/MainNavigator';
 
 export default function App() {
   // Load fonts
@@ -20,7 +21,39 @@ export default function App() {
     QuicksandSemiBold: require('./assets/fonts/Quicksand-SemiBold.ttf'),
   });
 
-  // If fonts are not loaded, display splash screen
+  const [isConnected, setIsConnected] = React.useState(true); // Manage network connectivity state
+
+  React.useEffect(() => {
+    const checkConnectivity = async () => {
+      try {
+        const networkState = await Network.getNetworkStateAsync();
+        if (!networkState.isConnected) {
+          Toast.show('Internet is not available', {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.TOP,
+            shadow: true,
+            animation: true,
+            hideOnPress: true,
+            delay: 300,
+            opacity: 0.9,
+          });
+        }
+        setIsConnected(networkState.isConnected);
+      } catch (error) {
+        console.error('Error checking network status:', error);
+      }
+    };
+
+    // Check connectivity initially and every 5 seconds thereafter
+    checkConnectivity();
+    const interval = setInterval(checkConnectivity, 5000);
+
+    return () => {
+      clearInterval(interval); // Cleanup on unmount
+    };
+  }, []);
+
+  // Show splash screen while fonts are loading
   if (!fontsLoaded) {
     return (
       <View style={styles.loaderContainer}>
@@ -40,9 +73,7 @@ export default function App() {
       <PersistGate loading={null} persistor={persistor}>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <PaperProvider theme={theme}>
-            <NavigationContainer>
-              <StackNavigation />
-            </NavigationContainer>
+            <MainNavigator />
           </PaperProvider>
         </GestureHandlerRootView>
       </PersistGate>
