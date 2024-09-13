@@ -4,6 +4,7 @@ import { StyleSheet, View, Text, Alert } from 'react-native';
 import { Avatar, Button, Card, Title, Paragraph, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { performLogout } from '../redux/reducer/authSlice';
+import Toast from 'react-native-root-toast';
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
@@ -12,11 +13,18 @@ const ProfileScreen = () => {
   const handleEditProfile = () => {
     Alert.alert('Coming Soon', 'The Edit Profile feature will be available soon!');
   };
-  const navigation = useNavigation();
   const handleLogout = () => {
     dispatch(performLogout())
       .then(() => {
-        // navigation.navigate('Login');
+        Toast.show('Logout successful', {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 300,
+          opacity: 0.9,
+        })
       })
       .catch((error) => {
         console.error('Logout error:', error);
@@ -41,7 +49,7 @@ const ProfileScreen = () => {
         <Card.Content>
           <TextInput
             label="Email"
-            value="john.doe@example.com"
+            value={user?.email ? user.email : "john.doe@example.com"}
             style={styles.input}
             mode="outlined"
             disabled

@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { validationMessages } from '../constants/ValidationMessages';
 import { registerUser } from '../redux/reducer/authSlice';
 import theme from '../../theme/ThemeConfig';
+import Toast from 'react-native-root-toast';
 
 const RegisterScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -21,6 +22,15 @@ const RegisterScreen = ({ navigation }) => {
       .unwrap()
       .then(() => {
         navigation.navigate('Login');
+        Toast.show('Registration successful', {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 300,
+          opacity: 0.9,
+        })
       })
       .catch((error) => {
         console.error(error);
