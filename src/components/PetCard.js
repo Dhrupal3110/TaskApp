@@ -2,19 +2,11 @@ import React from 'react';
 import { Card, Title, Paragraph, Chip } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { getRandomLightColor } from '../utils/functions';
 
 // Card component to display pet details using React Native Paper
 const PetCard = ({ pet }) => {
-
-  // Function to generate random color for the chips
-  const getRandomColor = () => {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  };
+  // Get navigation object
   const navigation = useNavigation();
 
   
@@ -26,7 +18,7 @@ const PetCard = ({ pet }) => {
         {pet.tags && pet.tags.length > 0 && (
           <View style={styles.tagsContainer}>
             {pet.tags.map((tag) => (
-              <Chip key={tag.id} style={[styles.tagChip,{backgroundColor: tag.color||getRandomColor()}]}>
+              <Chip key={tag.id} style={[styles.tagChip,{backgroundColor: tag.color||getRandomLightColor()}]}>
                 {tag.name}
               </Chip>
             ))}

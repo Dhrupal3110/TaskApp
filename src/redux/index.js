@@ -4,6 +4,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import persistReducer from "redux-persist/es/persistReducer";
 import persistStore from 'redux-persist/es/persistStore';
 import authSlice from './reducer/authSlice';
+import petReducer from './reducer/petSlice';
+import petDetailReducer from './reducer/petDetailSlice';
+import profileReducer from './reducer/profileSlice';
 
 const VERSION_KEY = 'reduxVersion';
 const DEFAULT_REDUX_VERSION = '1.0';
@@ -20,6 +23,8 @@ export const RESET_STATE = 'RESET_STATE';
 export const resetState = () => ({ type: RESET_STATE });
 export const rootReducer = combineReducers({
     user: authSlice,
+    pets: petReducer,
+    petDetail: petDetailReducer,
 })
 
 

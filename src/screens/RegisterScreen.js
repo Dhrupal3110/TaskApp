@@ -4,22 +4,23 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { validationMessages } from '../constants/ValidationMessages';
-import { loginUser } from '../redux/reducer/authSlice';
+import { registerUser } from '../redux/reducer/authSlice';
 import theme from '../../theme/ThemeConfig';
 
-const LoginScreen = ({ navigation }) => {
+const RegisterScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const validationSchema = Yup.object().shape({
+    name: Yup.string().required(validationMessages.nameRequired),
     email: Yup.string().email(validationMessages.invalidEmail).required(validationMessages.emailRequired),
     password: Yup.string().min(6, validationMessages.passwordTooShort).required(validationMessages.passwordRequired),
   });
 
-  const handleLogin = (values) => {
-    dispatch(loginUser(values))
+  const handleRegister = (values) => {
+    dispatch(registerUser(values))
       .unwrap()
       .then(() => {
-        // navigation.navigate('Home');
+        navigation.navigate('Login');
       })
       .catch((error) => {
         console.error(error);
@@ -28,15 +29,27 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Login</Text>
+      <Text style={styles.header}>Register</Text>
 
       <Formik
-        initialValues={{ email: '', password: '' }}
+        initialValues={{ name: '', email: '', password: '' }}
         validationSchema={validationSchema}
-        onSubmit={handleLogin}
+        onSubmit={handleRegister}
       >
         {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
           <>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Name"
+                onChangeText={handleChange('name')}
+                onBlur={handleBlur('name')}
+                value={values.name}
+                testID="name-input"
+              />
+              {touched.name && errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
+            </View>
+
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.input}
@@ -64,12 +77,12 @@ const LoginScreen = ({ navigation }) => {
               {touched.password && errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
             </View>
 
-            <TouchableOpacity style={[styles.loginButton,{backgroundColor:theme.colors.primary}]} onPress={handleSubmit} testID="login-button">
-              <Text style={styles.buttonText}>Login</Text>
+            <TouchableOpacity style={[styles.registerButton,{backgroundColor:theme.colors.primary}]} onPress={handleSubmit} testID="register-button">
+              <Text style={styles.buttonText}>Register</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.navigate('Register')} style={styles.registerLink}>
-              <Text style={styles.registerText}>Don't have an account? Register</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.loginLink}>
+              <Text style={styles.loginText}>Already have an account? Login</Text>
             </TouchableOpacity>
           </>
         )}
@@ -110,7 +123,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 4,
   },
-  loginButton: {
+  registerButton: {
     width: '85%',
     paddingVertical: 14,
     borderRadius: 8,
@@ -122,13 +135,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
-  registerLink: {
+  loginLink: {
     marginTop: 16,
   },
-  registerText: {
+  loginText: {
     color: '#007BFF',
     fontSize: 16,
   },
 });
 
-export default LoginScreen;
+export default RegisterScreen;

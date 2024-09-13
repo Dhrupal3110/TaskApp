@@ -1,38 +1,49 @@
-import React, { useEffect, useState } from 'react'
-import { Alert, Button, StyleSheet, Text, View } from 'react-native'
-import { petApi } from '../api';
-import { ScrollView } from 'react-native-gesture-handler';
-import PetCard from '../components/PetCard';
+// Import necessary libraries and components
+import React, { useEffect } from 'react';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import PetCard from '../components/PetCard'; // Custom component to display pet details
+import { fetchPets } from '../redux/reducer/petSlice'; // Redux action to fetch pet data
+import LoadingIndicator from '../components/LoadingIndicator';
 
-const HomeScreen = ({ navigation }) => {
-  const [pets, setPets] = useState(null);
+// HomeScreen Component
+const HomeScreen = () => {
+  const dispatch = useDispatch(); // Initialize Redux dispatch
+  // Select state data from Redux store: pets, loading status, and error message
+  const { pets, loading, error } = useSelector((state) => state.pets);
 
-  const getPet = async () => {
-    try {
-      const response = await petApi.findPetsByStatus(['available', 'pending', 'sold']);
-      console.log(response.data[0], "response.data")
-      setPets(response.data.splice(0, 100));
-    } catch (error) {
-      console.warn(error)
-      Alert.alert('An error occurred');
-    }
-  };
-
-
+  // Fetch pets data when the component is mounted
   useEffect(() => {
-    getPet();
-  }, []);
+    dispatch(fetchPets());
+  }, [dispatch]);
+
+  // Show an alert if there's an error
+  useEffect(() => {
+    if (error) {
+      Alert.alert('An error occurred', error);
+    }
+  }, [error]);
+
   return (
     <ScrollView>
       <View style={styles.container}>
-        {
+        {loading ? (
+          // Display loading component while fetching data
+          <LoadingIndicator />
+        ) : (
+          // Render PetCard components for each pet in the list
           pets && pets.length > 0 && pets.map((pet) => <PetCard key={pet.id} pet={pet} />)
-        }
+        )}
       </View>
     </ScrollView>
   );
 };
 
-export default HomeScreen
+export default HomeScreen;
 
-const styles = StyleSheet.create({})
+// Styles for HomeScreen component
+const styles = StyleSheet.create({
+  container: {
+    padding: 8, // Add padding to avoid content touching screen edges
+  },
+});
