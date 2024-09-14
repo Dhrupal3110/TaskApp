@@ -20,7 +20,7 @@
     "axios": "^1.7.7",
     "expo": "~50.0.8",
     "expo-dev-client": "~3.3.9",
-    "expo-font": "^12.0.10",
+    "expo-dev-launcher": "^4.0.27",
     "expo-network": "^6.0.1",
     "expo-status-bar": "~1.11.1",
     "firebase": "^10.13.1",

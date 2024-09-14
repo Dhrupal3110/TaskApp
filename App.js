@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { useFonts } from 'expo-font';
-import { ImageBackground, View, ActivityIndicator, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
 import theme from './theme/ThemeConfig';
 import { persistor, store } from './src/redux';
@@ -12,14 +11,7 @@ import Toast from 'react-native-root-toast';
 import MainNavigator from './src/navigations/MainNavigator';
 
 export default function App() {
-  // Load fonts
-  const [fontsLoaded] = useFonts({
-    QuicksandBold: require('./assets/fonts/Quicksand-Bold.ttf'),
-    QuicksandLight: require('./assets/fonts/Quicksand-Light.ttf'),
-    QuicksandMedium: require('./assets/fonts/Quicksand-Medium.ttf'),
-    QuicksandRegular: require('./assets/fonts/Quicksand-Regular.ttf'),
-    QuicksandSemiBold: require('./assets/fonts/Quicksand-SemiBold.ttf'),
-  });
+
 
   const [isConnected, setIsConnected] = React.useState(true); // Manage network connectivity state
 
@@ -53,19 +45,6 @@ export default function App() {
     };
   }, []);
 
-  // Show splash screen while fonts are loading
-  if (!fontsLoaded) {
-    return (
-      <View style={styles.loaderContainer}>
-        <ImageBackground
-          source={require('./assets/splash.png')}
-          style={styles.splashImage}
-        >
-          <ActivityIndicator size="large" color="#ffffff" />
-        </ImageBackground>
-      </View>
-    );
-  }
 
   // Main app render
   return (

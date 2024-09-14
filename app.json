@@ -33,9 +33,6 @@
         "projectId": "82ed93fe-70c7-4e2a-89a5-6dc4cc2c9a65"
       }
     },
-    "plugins": [
-      "expo-font"
-    ],
     "owner": "dhrupalrafaliya"
   }
 }
