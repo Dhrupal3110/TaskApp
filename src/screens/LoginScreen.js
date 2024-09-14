@@ -2,14 +2,16 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { validationMessages } from '../constants/ValidationMessages';
 import { loginUser } from '../redux/reducer/authSlice';
 import theme from '../../theme/ThemeConfig';
 import Toast from 'react-native-root-toast';
+import { ActivityIndicator } from 'react-native-paper';
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  const {loading} = useSelector((state) => state.user);
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().email(validationMessages.invalidEmail).required(validationMessages.emailRequired),
@@ -73,8 +75,8 @@ const LoginScreen = ({ navigation }) => {
               {touched.password && errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
             </View>
 
-            <TouchableOpacity style={[styles.loginButton,{backgroundColor:theme.colors.primary}]} onPress={handleSubmit} testID="login-button">
-              <Text style={styles.buttonText}>Login</Text>
+            <TouchableOpacity style={[styles.loginButton,{backgroundColor:loading?theme.colors.disabled:theme.colors.primary}]} onPress={handleSubmit} testID="login-button">
+              {loading?<ActivityIndicator color={theme.colors.primary}/>:null}<Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => navigation.navigate('Register')} style={styles.registerLink}>
@@ -125,6 +127,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 16,
+    flexDirection:'row',
+    justifyContent:'center',
+    gap:6
   },
   buttonText: {
     color: '#fff',

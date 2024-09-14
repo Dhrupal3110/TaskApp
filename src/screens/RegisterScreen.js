@@ -2,14 +2,16 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { validationMessages } from '../constants/ValidationMessages';
 import { registerUser } from '../redux/reducer/authSlice';
 import theme from '../../theme/ThemeConfig';
 import Toast from 'react-native-root-toast';
+import { ActivityIndicator } from 'react-native-paper';
 
 const RegisterScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  const {loading} = useSelector((state) => state.user);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(validationMessages.nameRequired),
@@ -17,7 +19,8 @@ const RegisterScreen = ({ navigation }) => {
     password: Yup.string().min(6, validationMessages.passwordTooShort).required(validationMessages.passwordRequired),
   });
 
-  const handleRegister = (values) => {
+  
+  const handleRegister = async (values) => {
     dispatch(registerUser(values))
       .unwrap()
       .then(() => {
@@ -87,8 +90,8 @@ const RegisterScreen = ({ navigation }) => {
               {touched.password && errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
             </View>
 
-            <TouchableOpacity style={[styles.registerButton,{backgroundColor:theme.colors.primary}]} onPress={handleSubmit} testID="register-button">
-              <Text style={styles.buttonText}>Register</Text>
+            <TouchableOpacity style={[styles.registerButton,{backgroundColor:loading?theme.colors.disabled:theme.colors.primary}]} onPress={handleSubmit} testID="register-button">
+            {loading?<ActivityIndicator color={theme.colors.primary}/>:null}<Text style={styles.buttonText}>Register</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.loginLink}>
@@ -139,6 +142,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 16,
+    flexDirection:'row',
+    justifyContent:'center',
+    gap:6
   },
   buttonText: {
     color: '#fff',

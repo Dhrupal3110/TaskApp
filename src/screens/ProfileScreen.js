@@ -1,14 +1,14 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, View, Text, Alert } from 'react-native';
-import { Avatar, Button, Card, Title, Paragraph, TextInput } from 'react-native-paper';
+import { StyleSheet, View, Text, Alert, ScrollView } from 'react-native';
+import { Avatar, Button, Card, TextInput, ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { performLogout } from '../redux/reducer/authSlice';
 import Toast from 'react-native-root-toast';
+import theme from '../../theme/ThemeConfig';
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
+  const { user,loading } = useSelector((state) => state.user);
   // Function to handle the "Edit Profile" button press
   const handleEditProfile = () => {
     Alert.alert('Coming Soon', 'The Edit Profile feature will be available soon!');
@@ -31,7 +31,7 @@ const ProfileScreen = () => {
       });
   };
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {/* Avatar and Name */}
       <View style={styles.avatarContainer}>
         <Avatar.Image
@@ -40,7 +40,9 @@ const ProfileScreen = () => {
           style={styles.avatar}
         />
         {user && (
+          <>
           <Text style={styles.userInfo}>Logged in as {user.email}</Text>
+          </>
         )}
       </View>
 
@@ -79,11 +81,13 @@ const ProfileScreen = () => {
           mode="outlined"
           style={styles.button}
           onPress={handleLogout}
+          disabled={loading}
         >
+          {loading?<ActivityIndicator color={theme.colors.primary}/>:null}
           Logout
         </Button>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -118,6 +122,9 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     marginHorizontal: 10,
+    flexDirection:'row',
+    gap:6,
+    justifyContent:'center'
   },
 });
 

@@ -6,7 +6,6 @@ import persistStore from 'redux-persist/es/persistStore';
 import authSlice from './reducer/authSlice';
 import petReducer from './reducer/petSlice';
 import petDetailReducer from './reducer/petDetailSlice';
-import profileReducer from './reducer/profileSlice';
 
 const VERSION_KEY = 'reduxVersion';
 const DEFAULT_REDUX_VERSION = '1.0';
